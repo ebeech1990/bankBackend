@@ -22,6 +22,11 @@ public class AccountController {
     AccountRepository accountRepository;
 
 
+    @GetMapping("/")
+    public String hello() {
+        return "hi";
+    }
+
     @GetMapping("/accounts")
     public ResponseEntity<List<Account>> getAllAccounts(@RequestParam(required = false) String nickname) {
         try {
