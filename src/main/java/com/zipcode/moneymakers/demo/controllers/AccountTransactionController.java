@@ -35,13 +35,25 @@ public class AccountTransactionController {
 
     @PutMapping("accounts/{accountId}/deposit")
     public ResponseEntity<AccountTransaction> putDepositToAccount(@PathVariable Long accountId, @RequestParam Double amount, @RequestBody Account account){
-
         return new ResponseEntity<>(accountTransactionService.depositToAccount(accountId,account,amount), HttpStatus.OK);
+
     }
 
     @PutMapping("accounts/{accountId}/withdraw")
     public ResponseEntity<AccountTransaction> withdraw(@PathVariable Long accountId, @RequestParam Double amount, @RequestBody Account account){
-        return new ResponseEntity<>(accountTransactionService.withdrawFromAccount(accountId,account,amount), HttpStatus.OK);
+        try {
+            if (amount < account.getBalance()) {
+                return new ResponseEntity<>(accountTransactionService.withdrawFromAccount(accountId, account, amount), HttpStatus.OK);
+            } else {
+                return  new ResponseEntity<>(accountTransactionService.withdrawFromAccount(accountId, account,-amount),HttpStatus.OK);
+            }
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+        }
+
+
+
     }
 
     @PutMapping("accounts/transfer")
