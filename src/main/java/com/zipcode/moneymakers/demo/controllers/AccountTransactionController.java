@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-//@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api")
 public class AccountTransactionController {
@@ -40,8 +40,17 @@ public class AccountTransactionController {
     }
 
     @PutMapping("accounts/{accountId}/withdraw")
-    public ResponseEntity<AccountTransaction> withdraw(@PathVariable Long accountId, @RequestParam Double amount, @RequestBody Account account){
-        return new ResponseEntity<>(accountTransactionService.withdrawFromAccount(accountId,account,amount), HttpStatus.OK);
+    public ResponseEntity<AccountTransaction> withdraw(@PathVariable Long accountId, @RequestParam Double amount, @RequestBody Account account) {
+        try {
+            if (amount < account.getBalance()) {
+                return new ResponseEntity<>(accountTransactionService.withdrawFromAccount(accountId, account, amount), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(accountTransactionService.withdrawFromAccount(accountId, account, -amount), HttpStatus.OK);
+            }
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+        }
     }
 
     @PutMapping("accounts/transfer")
