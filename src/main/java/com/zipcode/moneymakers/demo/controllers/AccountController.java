@@ -21,6 +21,10 @@ public class AccountController {
     AccountService accountService;
     AccountRepository accountRepository;
 
+    public AccountController(AccountService accountService) {
+        this.accountService=accountService;
+    }
+
 
     @GetMapping("/")
     public String hello() {
@@ -72,7 +76,6 @@ public class AccountController {
         accountService.deleteAccount(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
     @DeleteMapping("/accounts")
     public ResponseEntity<List<Account>> deleteAllAccounts() {
         try {

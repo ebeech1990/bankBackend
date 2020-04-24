@@ -17,7 +17,7 @@ public class AccountTransaction{
     @JoinColumn(name = "account_id")
     private Account account;
 
-    protected AccountTransaction() {}
+    public AccountTransaction() {}
 
     public AccountTransaction(AccountTransactionType type, double amount, Account account) {
         this.type = type;
